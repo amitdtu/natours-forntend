@@ -1,12 +1,12 @@
-import React, { useState, useEffect, Fragment } from "react";
-import { useLocation, useHistory } from "react-router-dom";
-import axios from "axios";
-import { Skeleton, message, Button } from "antd";
-import { StarOutlined } from "@ant-design/icons";
-import MapBox from "./mapbox";
-import { loadStripe } from "@stripe/stripe-js";
+import React, { useState, useEffect, Fragment } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
+import axios from 'axios';
+import { Skeleton, message, Button } from 'antd';
+import { StarOutlined } from '@ant-design/icons';
+import MapBox from './mapbox';
+import { loadStripe } from '@stripe/stripe-js';
 
-const stripePromise = loadStripe("pk_test_ivzDYVvN4znBx8cOXDqhNIfX00NTmk9Dry");
+const stripePromise = loadStripe('pk_test_ivzDYVvN4znBx8cOXDqhNIfX00NTmk9Dry');
 
 export default function TourDetails(props) {
   let location = useLocation();
@@ -18,7 +18,7 @@ export default function TourDetails(props) {
     console.log(props);
     try {
       const tourId = location?.state?.tourId;
-      if (!tourId) return message.error("tour id not found.");
+      if (!tourId) return message.error('tour id not found.');
       setIsLoading(true);
 
       const url = `/booking/checkout-session/${tourId}`;
@@ -42,7 +42,7 @@ export default function TourDetails(props) {
 
   useEffect(() => {
     const tourId = location?.state?.tourId;
-    if (!tourId) history.push("/");
+    if (!tourId) history.push('/');
     const url = `/tours/${tourId}`;
 
     axios.get(url).then((res) => {
@@ -100,9 +100,9 @@ export default function TourDetails(props) {
                 </svg>
                 <span className="overview-box__label">Next date</span>
                 <span className="overview-box__text">
-                  {new Date(tour.startDates[0]).toLocaleString("en-US", {
-                    year: "numeric",
-                    month: "long",
+                  {new Date(tour.startDates[0]).toLocaleString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
                   })}
                 </span>
               </div>
@@ -137,7 +137,8 @@ export default function TourDetails(props) {
               {tour.guides.map((guide, index) => (
                 <div key={index} className="overview-box__detail">
                   <img
-                    src={require(`../assets/img/users/${guide.photo}`)}
+                    // src={require(`../assets/img/users/${guide.photo}`)}
+                    c={`${axios.defaults.params.mediaURL}/img/users/${guide.photo}`}
                     alt="Lead guide"
                     className="overview-box__img"
                   />
@@ -182,7 +183,7 @@ export default function TourDetails(props) {
               <p className="reviews__text">{review.review}</p>
               <div className="reviews__rating">
                 {[...Array(Math.round(review.rating))].map((el, index) => (
-                  <StarOutlined key={index} style={{ color: "#55c57a" }} />
+                  <StarOutlined key={index} style={{ color: '#55c57a' }} />
                 ))}
               </div>
             </div>
