@@ -1,25 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect, useLayoutEffect } from "react";
+import "./App.css";
+import AppRouter from "./routes/router";
+import axios from "axios";
+import AuthContext from "./components/authContext";
 
-function App() {
+function App(props) {
+  // const history = useHistory();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
+  const [goTo, setgoTo] = useState(null);
+  const value = { isAuthenticated, setIsAuthenticated, user, setUser, goTo };
+  const [isDone, setIsDone] = useState(false);
+
+  const go = window.location.pathname === "/" ? null : window.location.pathname;
+  useLayoutEffect(() => {
+    const url = "/users/isLoggedIn";
+    axios
+      .get(url)
+      .then((res) => {
+        // console.log(res.data);
+        setUser(res.data.user);
+        setIsAuthenticated(true);
+        setgoTo(go);
+        setIsDone(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsDone(true);
+      });
+  }, []);
+
+  if (!isDone) return <div>Loading...</div>;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthContext.Provider value={value}>
+      <div className="App">
+        <AppRouter />
+      </div>
+    </AuthContext.Provider>
   );
 }
 
